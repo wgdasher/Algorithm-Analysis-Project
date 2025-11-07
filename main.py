@@ -2,6 +2,8 @@
 # Tic-Tac-Toe with Minimax and Alpha-Beta Pruning (rough prototype)
 # Adheres to project proposal: decision tree search, alpha-beta pruning, node counts, timing.
 
+#Prototype------------------------------------------------------------------------
+
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 import time
