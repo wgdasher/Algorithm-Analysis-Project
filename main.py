@@ -25,6 +25,13 @@ WIN_LINES = [
     (0,3,6), (1,4,7), (2,5,8),
     (0,4,8), (2,4,6),
 ]
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+#                       Helper Functions
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
 
 # ----------------------------------------------------------------
 # print_board function
@@ -126,6 +133,51 @@ def apply_move(b: List[str], index: int, mark: str) -> List[str]:
 
     new_board[index] = mark # Applies the players new move to board
     return new_board #returns board
+
+# ----------------------------------------------------------------
+# choose_first function
+# Prompts the user to decide who moves first in the console game
+# Returns: str -- "human" if player chooses to move first, "ai" if the player chooses to move second
+# Time Complexity: O(1)
+# Space Complexity: 0(1)
+def choose_first() -> str:
+    while True:
+        ans = input("Do you want to go first? (y/n): ").strip().lower()
+        if ans in ("y", "yes"):
+            return "human"
+        if ans in ("n", "no"):
+            return "ai"
+        print("Please enter 'y' or 'n'.")
+
+# ----------------------------------------------------------------
+# read_human_move function
+# Reads and validates the players move from the console input
+# Parameters: board(List[str]) - Current board state
+# returns: int -- index of the valid cell chosen by the player
+# Time Complexity: O(1)
+# Space Complexity: O(1)
+def read_human_move(board: List[str]) -> int:
+    while True:
+        try:
+            s = input("Your move (1-9): ").strip()
+            index = int(s) - 1
+            if index not in range(9):
+                print("Enter a number between 1 and 9.")
+                continue
+            if board[index] != ' ':
+                print("That square is taken. Choose another.")
+                continue
+            return index
+        except ValueError:
+            print("Please enter a valid integer (1-9).")
+
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+#                       Minimax functions
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
 
 # ----------------------------------------------------------------
 # evaluate_terminal function
@@ -374,41 +426,14 @@ def best_ai_move(board: List[str], ai: str, human: str, compare_plain_minimax: b
     metrics = Metrics(ab_nodes=nodes, ab_time_ms=ab_ms, mm_nodes=mm_nodes, mm_time_ms=mm_ms)
     return move, metrics
 
-# ----------------------------------------------------------------
-# choose_first function
-# Prompts the user to decide who moves first in the console game
-# Returns: str -- "human" if player chooses to move first, "ai" if the player chooses to move second
-# Time Complexity: O(1)
-# Space Complexity: 0(1)
-def choose_first() -> str:
-    while True:
-        ans = input("Do you want to go first? (y/n): ").strip().lower()
-        if ans in ("y", "yes"):
-            return "human"
-        if ans in ("n", "no"):
-            return "ai"
-        print("Please enter 'y' or 'n'.")
-# ----------------------------------------------------------------
-# read_human_move function
-# Reads and validates the players move from the console input
-# Parameters: board(List[str]) - Current board state
-# returns: int -- index of the valid cell chosen by the player
-# Time Complexity: O(1)
-# Space Complexity: O(1)
-def read_human_move(board: List[str]) -> int:
-    while True:
-        try:
-            s = input("Your move (1-9): ").strip()
-            index = int(s) - 1
-            if index not in range(9):
-                print("Enter a number between 1 and 9.")
-                continue
-            if board[index] != ' ':
-                print("That square is taken. Choose another.")
-                continue
-            return index
-        except ValueError:
-            print("Please enter a valid integer (1-9).")
+
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+#                       Driver Section
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////
 
 # ----------------------------------------------------------------
 # play function
