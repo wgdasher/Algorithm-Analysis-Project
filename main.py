@@ -1,6 +1,12 @@
-# Algorithm Analysis Project: Prototype Version: 02
-# Refactored and explicit comments to explain logic and flow of program
+# Authors: Garrett Dasher, Chandler Armstrong, Elizabeth Rodriguez,
+# Minimax Tic-Tac-Toe with Alpha-Beta Pruning
+#
 
+#---------------------------------------------------------------------------------
+#                               To Do List:
+#   1. Return count of Chosen AI Square
+#   2. Establish roles for the presentation
+#   3. Finish slides
 #---------------------------------------------------------------------------------
 # Imports:
 # dataclass used to simplify constructors
@@ -478,7 +484,7 @@ def play():
                 print(f"Plain Minimax: {m.mm_nodes} nodes, {m.mm_time_ms:.3f} ms")
                 if m.mm_nodes > 0:
                     savings = 100.0 * (1.0 - (m.ab_nodes / m.mm_nodes))
-                    print(f"Pruning saved ≈ {savings:.1f}% nodes")
+                    print(f"Alpha-Beta Space Improvement ≈ {savings:.1f}%")
             print()
             turn = "human" # passes control back to User
 
