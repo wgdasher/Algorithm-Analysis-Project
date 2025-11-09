@@ -1,13 +1,8 @@
-# Authors: Garrett Dasher, Chandler Armstrong, Elizabeth Rodriguez,
+# Authors: Elizabeth Rodriguez, Ian Campbell, Chandler Armstrong, Garrett Dasher
 # Minimax Tic-Tac-Toe with Alpha-Beta Pruning
-#
+# Objective: Compare the performance of a Tic-Tac-Toe game between a Minimax implementation and
+# a Minimax with Alpha Beta Pruning for reduction in redundant recursion calls.
 
-#---------------------------------------------------------------------------------
-#                               To Do List:
-#   1. Return count of Chosen AI Square
-#   2. Establish roles for the presentation
-#   3. Finish slides
-#---------------------------------------------------------------------------------
 # Imports:
 # dataclass used to simplify constructors
 # List, Optional, Tuple used as type hints
@@ -257,7 +252,7 @@ def minimax_plain(b: List[str], depth: int, is_max: bool, ai: str, human: str) -
                 best_move = mv
         # Return the best score we could achieve and the move that attains it
         return best_val, best_move, nodes
-    else:       # Human's turn
+    else:       # Human's turn (Minimizer)
         best_val = 10_000 # Initialize to very high so any legal score will be lower
         for mv in legal_moves(b): # Try every legal move the human can play
             child = apply_move(b, mv, human) # Simulate human playing at index mv
@@ -505,7 +500,3 @@ def play():
 # Return: Void
 if __name__ == "__main__":
     play()
-
-
-
-# Testing
