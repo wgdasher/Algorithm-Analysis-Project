@@ -143,12 +143,16 @@ def apply_move(b: List[str], index: int, mark: str) -> List[str]:
 # Space Complexity: 0(1)
 def choose_first() -> str:
     while True:
+        # Prompt user for first turn preference
         ans = input("Do you want to go first? (y/n): ").strip().lower()
+        # Return "human" if user wants to go first
         if ans in ("y", "yes"):
             return "human"
+            # Return "ai" if user wants AI to go first
         if ans in ("n", "no"):
             return "ai"
         print("Please enter 'y' or 'n'.")
+        # Loop continues if invalid input
 
 # ----------------------------------------------------------------
 # read_human_move function
