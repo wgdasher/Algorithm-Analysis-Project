@@ -235,6 +235,7 @@ def evaluate_terminal(b: List[str], ai: str, depth: int) -> Optional[int]:
 def minimax_plain(b: List[str], depth: int, is_max: bool, ai: str, human: str) -> Tuple[int, Optional[int], int]:
     nodes = 1  # count this node as explored
 
+    #base case
     # Evaluate terminal states (win/loss/draw). If terminal, return None
     term = evaluate_terminal(b, ai, depth)
     if term is not None:
@@ -242,7 +243,7 @@ def minimax_plain(b: List[str], depth: int, is_max: bool, ai: str, human: str) -
         return term, None, nodes
 
     best_move = None # track the best move found at this node
-
+    #Recursive cases
     if is_max:
         # AI's turn (Maximizer)
         best_val = -10_000 # Initialize to very low so any legal score will be higher
@@ -252,7 +253,7 @@ def minimax_plain(b: List[str], depth: int, is_max: bool, ai: str, human: str) -
             val, _, c_nodes = minimax_plain(child, depth+1, False, ai, human)
             nodes += c_nodes # Accumulate total nodes explored
 
-            #keep the best score we could achieve and hte move that attains it
+            #keep the best score we could achieve and the move that attains it
             if val > best_val:
                 best_val = val
                 best_move = mv
@@ -311,14 +312,17 @@ def minimax_plain(b: List[str], depth: int, is_max: bool, ai: str, human: str) -
 # Space Complexity: O(d): Recursion stack + 0(1) locals per frame
 def minimax_ab(b: List[str], depth: int, is_max: bool, ai: str, human: str,
                alpha: int, beta: int) -> Tuple[int, Optional[int], int]:
+    # Base Case
     nodes = 1  # Count this node as explored
     term = evaluate_terminal(b, ai, depth)
     if term is not None:
         return term, None, nodes # leaf node: no move to report
 
     best_move = None # track the best move found from this node
-    if is_max:  # AI's turn (maximize)
-        best_val = -10_000 #start below any realistic score
+
+    # Recursive Cases:
+    if is_max:  # AI's turn - maximize
+        best_val = -10_000 #start below any realistic score, low bound
         for mv in legal_moves(b): # consider every legal AI move
             child = apply_move(b, mv, ai) # Hypothetically apply the move
             # Recurse to the minimizing layer; pass current alpha/beta bounds
@@ -338,8 +342,8 @@ def minimax_ab(b: List[str], depth: int, is_max: bool, ai: str, human: str,
             if beta <= alpha:
                 break  # Cut off remaining moves (alpha-beta pruning)
         return best_val, best_move, nodes
-    else:       # Human's turn (minimize)
-        best_val = 10_000 #start above any realistic score
+    else:       # User's turn - minimize
+        best_val = 10_000 #start above any realistic score, high bound
         for mv in legal_moves(b): # Consider every legal Human move
             child = apply_move(b, mv, human) # Hypothetically apply the move
             # Recurse to the maximizing layer; pass current alpha/beta bounds
@@ -383,7 +387,7 @@ class Metrics:
 
 # ----------------------------------------------------------------
 # best_ai_move function
-# Computer the AI's move using Alpha-Beta and optionally run plain Minimax for side by side performance comparison
+# Compute the AI's move using Alpha-Beta and optionally run plain Minimax for side by side performance comparison
 # Returns the chosen move index and a metrics record with timing
 # And node-expansion counts per teh projects evaluation plan
 # Parameters:
@@ -411,7 +415,7 @@ def best_ai_move(board: List[str], ai: str, human: str, compare_plain_minimax: b
     t1 = time.perf_counter() # Stop timer
     ab_ms = (t1 - t0) * 1000.0 # Convert seconds to milliseconds
 
-    # Optional plain Minimax (baseline)
+    # Optional plain Minimax
     mm_nodes = None
     mm_ms = None
     if compare_plain_minimax:
@@ -421,13 +425,6 @@ def best_ai_move(board: List[str], ai: str, human: str, compare_plain_minimax: b
         t3 = time.perf_counter()
         mm_ms = (t3 - t2) * 1000.0
         mm_nodes = nodes2
-
-    # Fallback safety
-    if move is None:
-        # Should not happen unless teh position is terminal or inputs are invalid
-        # Fall back to the first legal move if any. else return -1
-        lm = legal_moves(board)
-        move = lm[0] if lm else -1
 
     # Package metrics and return
     metrics = Metrics(ab_nodes=nodes, ab_time_ms=ab_ms, mm_nodes=mm_nodes, mm_time_ms=mm_ms)
@@ -469,7 +466,7 @@ def play():
             print_board(board) # Re-render board
             turn = "ai" # Pass control to AI
         else: # AI's turn
-            print("AI is thinking...")
+            print("AI turn:")
 
             # Compute AI move using Alpha-Beta (and optionally plain Minimax for metrics)
             move, m = best_ai_move(board, ai=ai, human=human, compare_plain_minimax=True)
@@ -485,7 +482,7 @@ def play():
                 print(f"Plain Minimax: {m.mm_nodes} nodes, {m.mm_time_ms:.3f} ms")
                 if m.mm_nodes > 0:
                     savings = 100.0 * (1.0 - (m.ab_nodes / m.mm_nodes))
-                    print(f"Alpha-Beta Space Improvement ≈ {savings:.1f}%")
+                    print(f"Alpha-Beta Performance Improvement ≈ {savings:.1f}%")
             print()
             turn = "human" # passes control back to User
 
