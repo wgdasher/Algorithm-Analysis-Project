@@ -22,9 +22,9 @@ import time
 #   3 | 4 | 5
 #   6 | 7 | 8
 WIN_LINES = [
-    (0,1,2), (3,4,5), (6,7,8),
-    (0,3,6), (1,4,7), (2,5,8),
-    (0,4,8), (2,4,6),
+    (0,1,2), (3,4,5), (6,7,8), # Three horizontal rows
+    (0,3,6), (1,4,7), (2,5,8), # Three vertical columns 
+    (0,4,8), (2,4,6),           # Two Diagonal lines
 ]
 # /////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////
@@ -66,8 +66,10 @@ def print_board(b: List[str]) -> None:
 def winner(b: List[str]) -> Optional[str]:
     # Check that the first cell in this line is not empty
     # and that all three cells contain the same symbol
+    # Checks each winning line
     for a, c, d in WIN_LINES:
-        if b[a] != ' ' and b[a] == b[c] == b[d]:
+        # Verify first cell is not empty AND all three cells match
+        if b[a] != ' ' and b[a] == b[c] == b[d]: 
             # returns the symbol 'X' or 'O' of the winning player
             return b[a]
     # If the loop finishes with no matches, no winner is selected: return None
